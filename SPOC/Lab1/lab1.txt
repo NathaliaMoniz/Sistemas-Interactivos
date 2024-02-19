@@ -1,0 +1,10 @@
+getCurrentPosition para colocar la ubicaion al principio
+watchPosition para  seguir con el movimiento de la ubicacion 
+'contexmenu' sale un meno contextual del ordenador pulsando una tecla o haciendo touch, para prevenir menus por defecto del navegador se usa preventDefault
+'pointerdown' click --> se tiene un targe (donde se ha hecho click) puedo hacer que el target sea el marker 
+Date()/1000 --> se convierte en un tiemstamp en segundos, se compara el tiempo entre el pointerup y el pointerup
+
+poner mas de un destino
+colocar un circulo para mostrar el area donde estoy
+tener checkbox para seguir al usuario
+frecuencia de vibracion mas rápida al acercarse al destino 

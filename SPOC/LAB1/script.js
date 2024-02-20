@@ -8,11 +8,14 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 var marker;
 
 var Icono_posiscion = L.icon({
-  iconUrl: './media/marcador-de-posicion.png',
-  iconSize: [40, 45],
-  iconAnchor: [22, 94],
-  popupAnchor: [-3, -76],
-  shadowSize: [68, 95],
+  iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png',
+      shadowSize: [41, 41],
+      shadowAnchor: [12, 41],
+      iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png'
 });
 
 const watchID = navigator.geolocation.watchPosition(function (position) { 

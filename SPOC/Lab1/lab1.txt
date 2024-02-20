@@ -8,3 +8,30 @@ poner mas de un destino
 colocar un circulo para mostrar el area donde estoy
 tener checkbox para seguir al usuario
 frecuencia de vibracion mas rápida al acercarse al destino 
+
+
+mymap.on('dblclick', function(e){
+  var latitud_destino = e.latlng.lat;
+  var longitud_destino = e.latlng.lng;
+  var confirmación = window.confirm('¿Desea agregar este punto como destino?');
+
+  if(confirmación){
+    marker_destino = L.marker([latitud_destino, longitud_destino]).addTo(mymap);
+    radio_destino = L.circle([latitud_destino, longitud_destino],  40).addTo(mymap);
+    
+    var visible = true;
+
+    var intervalo = setInterval(function(){
+      if(visible){
+
+        radio_destino.setStyle({opacity: 0.7, fillOpacity: 0.3});
+      }
+      
+      else{
+        radio_destino.setStyle({opacity: 1, fillOpacity: 0.5});
+      }
+
+      visible = !visible;
+    }, 500);
+  }
+});

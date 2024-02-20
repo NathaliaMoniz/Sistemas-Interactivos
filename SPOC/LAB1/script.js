@@ -5,7 +5,12 @@ L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
   maxZoom: 18
 }).addTo(mymap);
 
+
 var marker;
+var radio_destino;
+var marker_destino;
+var destinos = [];
+
 
 var Icono_posiscion = L.icon({
   iconUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon.png',
@@ -18,47 +23,77 @@ var Icono_posiscion = L.icon({
       iconUrl: 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png'
 });
 
-const watchID = navigator.geolocation.watchPosition(function (position) { 
+pos_ini = navigator.geolocation.getCurrentPosition(function (position){
   var latitud = position.coords.latitude;
   var longitud = position.coords.longitude;
   
   mymap.setView([latitud, longitud], 20);
-  
+});
 
-  if (marker){
-    marker.setLatLng([latitud, longitud], );
-  }
-  else{
-    marker = L.marker([latitud, longitud], {icon: Icono_posiscion}).addTo(mymap);
-    marker.bindPopup("Estás aquí").openPopup();
+function stopVibrating() {
+  navigator.vibrate(0); // Detener la vibración
+}
+
+function añadirDestino(e){
+  var marker_destino = L.marker(e.latlng).addTo(mymap);
+  var circle = L.circle(e.latlng, { radius: 60, opacity: 0.5 }).addTo(mymap);
+
+  destinos.push({ marker: marker_destino, circle: circle });
+
+  setInterval(function () {
+    circle.setStyle({ opacity: circle.options.opacity === 0.5 ? 0 : 0.5 });
+  }, 500);
+
+  marker_destino.on('click', function () {
+    setTimeout(function () {
+        var confirmDelete = confirm("¿Desea eliminar este destino?");
+        if (confirmDelete) {
+            mymap.removeLayer(marker_destino);
+            mymap.removeLayer(circle);
+            destinos = destinos.filter(function (item) {
+                return item.marker_destino !== marker_destino;
+            });      
+        }
+    });
+  });
+}
+
+mymap.on('dblclick', function (e) {
+  var addDestination = confirm("¿Desea añadir un destino?");
+  if (addDestination) {
+      añadirDestino(e);
   }
 });
 
 
-mymap.on('dblclick', function(e){
-  var latitud_destino = e.latlng.lat;
-  var longitud_destino = e.latlng.lng;
 
-  var confirmación = window.confirm('¿Desea agregar este punto como destino?');
-
-  if(confirmación){
-    var marker_destino = L.marker([latitud_destino, longitud_destino]).addTo(mymap);
-    var radio_destino = L.circle([latitud_destino, longitud_destino],  40).addTo(mymap);
-
-    var visible = true;
-
-    var intervalo = setInterval(function(){
-      if(visible){
-        radio_destino.setStyle({opacity: 0.7, fillOpacity: 0.3});
-      }else{
-        radio_destino.setStyle({opacity: 1, fillOpacity: 0.5});
-      }
-      visible = !visible;
-
-    }, 500);
+const watchID = navigator.geolocation.watchPosition(function (position) { 
+  var latitud = position.coords.latitude;
+  var longitud = position.coords.longitude;
+  // Si ya existe el marcador de origen se actualiza su posición
+  if (marker){
+    marker.setLatLng([latitud, longitud]);
   }
 
-})
+  // Si no existe se crea uno 
+  else{
+    marker = L.marker([latitud, longitud], {icon: Icono_posiscion}).addTo(mymap);
+    marker.bindPopup("Estás aquí").openPopup();
+  }
+
+  destinos.forEach(function (item){
+    // Si me encuentro dentro del area de mi destino el dispositivo empieza a vibrar
+      var centro = item.circle.getLatLng();
+      var distancia = centro.distanceTo([latitud, longitud])
+      var duracionVibracion = Math.max(0, item.circle.getRadius() - distancia);
+    
+      if (distancia <= item.circle.getRadius()) {
+        navigator.vibrate([duracionVibracion * 10, 50]);
+        console.log("hkjhkj")
+      }
+  })
+  
+});
 mymap.on('click', function(e) {
   console.log(e);
 

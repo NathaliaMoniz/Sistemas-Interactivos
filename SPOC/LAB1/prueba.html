@@ -1,58 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Destinos Leaflet</title>
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <style>
-        #mapid { height: 400px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa con Leaflet</title>
+  <!-- Reemplaza 'x.x.x' con la versión de Leaflet que estés utilizando -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.x.x/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+  <style>
+    #mapid {
+      height: 400px;
+    }
+  </style>
 </head>
 <body>
 
 <div id="mapid"></div>
+<button onclick="calcularRuta()">Mostrar Ruta</button>
 
+<script src="https://unpkg.com/leaflet@1.x.x/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
 <script>
-    var map = L.map('mapid').setView([51.505, -0.09], 13);
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
+var map = L.map('mapid').setView([40.416775, -3.703790], 13); // Madrid como ubicación inicial
 
-    var blinkingMarkers = [];
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+}).addTo(map);
 
-    function addBlinkingMarker(e) {
-        var marker = L.marker(e.latlng, { draggable: true }).addTo(map);
-        var circle = L.circle(e.latlng, { radius: 1000, color: 'red', opacity: 0.5 }).addTo(map);
-        blinkingMarkers.push({ marker: marker, circle: circle });
+var marcadorDestino = null;
 
-        // Blinking effect
-        setInterval(function () {
-            circle.setStyle({ opacity: circle.options.opacity === 0.5 ? 0 : 0.5 });
-        }, 500);
+// Función para añadir marcadores al hacer clic en el mapa
+function onMapClick(e) {
+    if (marcadorDestino !== null) {
+        map.removeLayer(marcadorDestino);
+    }
+    marcadorDestino = L.marker(e.latlng).addTo(map);
+}
 
-        marker.on('click', function () {
-            setTimeout(function () {
-                var confirmDelete = confirm("¿Desea eliminar este destino?");
-                if (confirmDelete) {
-                    map.removeLayer(marker);
-                    map.removeLayer(circle);
-                    blinkingMarkers = blinkingMarkers.filter(function (item) {
-                        return item.marker !== marker;
-                    });
-                }
-            }, 2000);
-        });
+map.on('click', onMapClick);
+
+function calcularRuta() {
+    if (marcadorDestino === null) {
+        alert("Debes seleccionar un destino haciendo clic en el mapa primero.");
+        return;
     }
 
-    map.on('dblclick', function (e) {
-        var addDestination = confirm("¿Desea añadir un destino?");
-        if (addDestination) {
-            addBlinkingMarker(e);
-        }
-    });
+    L.Routing.control({
+        waypoints: [
+            L.latLng(map.getCenter()), // origen (tu ubicación actual)
+            marcadorDestino.getLatLng() // destino (marcador colocado en el mapa)
+        ],
+        routeWhileDragging: true
+    }).addTo(map);
+}
 
 </script>
 </body>

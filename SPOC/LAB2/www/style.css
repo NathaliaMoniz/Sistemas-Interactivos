@@ -1,0 +1,57 @@
+
+body{
+  font-family: 'Montserrat', sans-serif;
+}
+
+h1{
+  text-align: center;
+}
+#task-container{
+  width: 100%;
+  margin: solid black;
+}
+
+#add-task-container {
+    position: fixed;
+    left: 15px;
+    right: 15px;
+    bottom: 15px;
+    display: flex;  
+    align-items: center;
+    justify-content: space-between;
+    
+  }
+  
+  #fab-add {
+    -webkit-user-select: none;
+    user-select: none;
+    width: 64px;
+    height: 64px;
+    border-radius: 50%;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    font-size: 1.2em;
+  }
+
+  #fab-add:active {
+    background-color: #ef9a9a;
+    color: #999999;
+  }
+
+  #task-name {
+    flex-grow: 1;
+    height: 64px;
+    margin-right: 15px;
+    font-family: 'Montserrat', sans-serif;
+  }
+
+  .task {
+    /* Aquí puedes definir las reglas de estilo para los divs de las tareas */
+    background-color: #f0f0f0; /* Color de fondo */
+    border: 1px solid #ea0909; /* Borde */
+    padding: 10px; /* Espaciado interno */
+    margin-bottom: 10px; /* Espaciado externo */
+    font-size: 1.2em; /* Tamaño de letra */
+    font-family: 'Montserrat', sans-serif;
+  }

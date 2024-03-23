@@ -47,12 +47,12 @@ h1{
   }
 
   .task {
-    /* Aquí puedes definir las reglas de estilo para los divs de las tareas */
-    background-color: #f0f0f0; /* Color de fondo */
-    border: 1px solid #ea0909; /* Borde */
-    padding: 10px; /* Espaciado interno */
-    margin-bottom: 10px; /* Espaciado externo */
-    font-size: 1.2em; /* Tamaño de letra */
+    
+    background-color: #f0f0f0; 
+    border: 1px solid #ea0909; 
+    padding: 10px; 
+    margin-bottom: 10px; 
+    font-size: 1.2em; 
     font-family: 'Montserrat', sans-serif;
   }
 
@@ -77,3 +77,8 @@ h1{
     height: 35px;
     width: 220px;
   } 
+
+  .highlight {
+    background-color: #ffff66; 
+    transition: background-color 0.2s ease; 
+  }
